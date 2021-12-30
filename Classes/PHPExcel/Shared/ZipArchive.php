@@ -34,8 +34,8 @@ class PHPExcel_Shared_ZipArchive
 {
 
     /**    constants */
-    const OVERWRITE = 'OVERWRITE';
-    const CREATE    = 'CREATE';
+    public const OVERWRITE = 'OVERWRITE';
+    public const CREATE    = 'CREATE';
 
 
     /**
@@ -110,7 +110,7 @@ class PHPExcel_Shared_ZipArchive
         $fileName = strtolower($fileName);
 
         $list = $this->zip->listContent();
-        $listCount = count($list);
+        $listCount = is_array($list) || $list instanceof \Countable ? count($list) : 0;
         $index = -1;
         for ($i = 0; $i < $listCount; ++$i) {
             if (strtolower($list[$i]["filename"]) == $fileName ||

@@ -263,7 +263,7 @@ class PHPExcel_Writer_Excel2007_Worksheet extends PHPExcel_Writer_Excel2007_Writ
             // Calculate freeze coordinates
             $xSplit = $ySplit = 0;
 
-            list($xSplit, $ySplit) = PHPExcel_Cell::coordinateFromString($topLeftCell);
+            [$xSplit, $ySplit] = PHPExcel_Cell::coordinateFromString($topLeftCell);
             $xSplit = PHPExcel_Cell::columnIndexFromString($xSplit);
 
             // pane
@@ -761,17 +761,17 @@ class PHPExcel_Writer_Excel2007_Worksheet extends PHPExcel_Writer_Excel2007_Writ
             $range = $range[0];
             //    Strip any worksheet ref
             if (strpos($range[0], '!') !== false) {
-                list($ws, $range[0]) = explode('!', $range[0]);
+                [$ws, $range[0]] = explode('!', $range[0]);
             }
             $range = implode(':', $range);
 
             $objWriter->writeAttribute('ref', str_replace('$', '', $range));
 
             $columns = $pSheet->getAutoFilter()->getColumns();
-            if (count($columns > 0)) {
+            if (is_array($columns > 0) || ($columns > 0) instanceof \Countable ? count($columns > 0) : 0) {
                 foreach ($columns as $columnID => $column) {
                     $rules = $column->getRules();
-                    if (count($rules) > 0) {
+                    if ((is_array($rules) || $rules instanceof \Countable ? count($rules) : 0) > 0) {
                         $objWriter->startElement('filterColumn');
                         $objWriter->writeAttribute('colId', $pSheet->getAutoFilter()->getColumnOffset($columnID));
 
@@ -1054,6 +1054,7 @@ class PHPExcel_Writer_Excel2007_Worksheet extends PHPExcel_Writer_Excel2007_Writ
      */
     private function writeCell(PHPExcel_Shared_XMLWriter $objWriter = null, PHPExcel_Worksheet $pSheet = null, $pCellAddress = null, $pStringTable = null, $pFlippedStringTable = null)
     {
+        $calculatedValue = null;
         if (is_array($pStringTable) && is_array($pFlippedStringTable)) {
             // Cell
             $pCell = $pSheet->getCell($pCellAddress);
@@ -1061,7 +1062,7 @@ class PHPExcel_Writer_Excel2007_Worksheet extends PHPExcel_Writer_Excel2007_Writ
             $objWriter->writeAttribute('r', $pCellAddress);
 
             // Sheet styles
-            if ($pCell->getXfIndex() != '') {
+            if ($pCell->getXfIndex() != 0) {
                 $objWriter->writeAttribute('s', $pCell->getXfIndex());
             }
 

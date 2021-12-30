@@ -37,12 +37,12 @@ $GLOBALS['_OLE_INSTANCES'] = array();
 */
 class PHPExcel_Shared_OLE
 {
-    const OLE_PPS_TYPE_ROOT   =      5;
-    const OLE_PPS_TYPE_DIR    =      1;
-    const OLE_PPS_TYPE_FILE   =      2;
-    const OLE_DATA_SIZE_SMALL = 0x1000;
-    const OLE_LONG_INT_SIZE   =      4;
-    const OLE_PPS_SIZE        =   0x80;
+    public const OLE_PPS_TYPE_ROOT   =      5;
+    public const OLE_PPS_TYPE_DIR    =      1;
+    public const OLE_PPS_TYPE_FILE   =      2;
+    public const OLE_DATA_SIZE_SMALL = 0x1000;
+    public const OLE_LONG_INT_SIZE   =      4;
+    public const OLE_PPS_SIZE        =   0x80;
 
     /**
      * The file handle for reading an OLE container
@@ -111,8 +111,8 @@ class PHPExcel_Shared_OLE
             throw new PHPExcel_Reader_Exception("Only Little-Endian encoding is supported.");
         }
         // Size of blocks and short blocks in bytes
-        $this->bigBlockSize = pow(2, self::_readInt2($fh));
-        $this->smallBlockSize  = pow(2, self::_readInt2($fh));
+        $this->bigBlockSize = 2 ** self::_readInt2($fh);
+        $this->smallBlockSize  = 2 ** self::_readInt2($fh);
 
         // Skip UID, revision number and version number
         fseek($fh, 44);
@@ -198,7 +198,7 @@ class PHPExcel_Shared_OLE
     {
         static $isRegistered = false;
         if (!$isRegistered) {
-            stream_wrapper_register('ole-chainedblockstream', 'PHPExcel_Shared_OLE_ChainedBlockStream');
+            stream_wrapper_register('ole-chainedblockstream', \PHPExcel_Shared_OLE_ChainedBlockStream::class);
             $isRegistered = true;
         }
 
@@ -206,7 +206,8 @@ class PHPExcel_Shared_OLE
         // in OLE_ChainedBlockStream::stream_open().
         // Object is removed from self::$instances in OLE_Stream::close().
         $GLOBALS['_OLE_INSTANCES'][] = $this;
-        $instanceId = end(array_keys($GLOBALS['_OLE_INSTANCES']));
+        $arrayKeys = array_keys($GLOBALS['_OLE_INSTANCES']);
+        $instanceId = end($arrayKeys);
 
         $path = 'ole-chainedblockstream://oleInstanceId=' . $instanceId;
         if ($blockIdOrPps instanceof PHPExcel_Shared_OLE_PPS) {
@@ -226,7 +227,7 @@ class PHPExcel_Shared_OLE
      */
     private static function _readInt1($fh)
     {
-        list(, $tmp) = unpack("c", fread($fh, 1));
+        [, $tmp] = unpack("c", fread($fh, 1));
         return $tmp;
     }
 
@@ -238,7 +239,7 @@ class PHPExcel_Shared_OLE
      */
     private static function _readInt2($fh)
     {
-        list(, $tmp) = unpack("v", fread($fh, 2));
+        [, $tmp] = unpack("v", fread($fh, 2));
         return $tmp;
     }
 
@@ -250,7 +251,7 @@ class PHPExcel_Shared_OLE
      */
     private static function _readInt4($fh)
     {
-        list(, $tmp) = unpack("V", fread($fh, 4));
+        [, $tmp] = unpack("V", fread($fh, 4));
         return $tmp;
     }
 
@@ -264,6 +265,7 @@ class PHPExcel_Shared_OLE
     */
     public function _readPpsWks($blockId)
     {
+        $pps = null;
         $fh = $this->getStream($blockId);
         for ($pos = 0;; $pos += 128) {
             fseek($fh, $pos, SEEK_SET);
@@ -464,7 +466,7 @@ class PHPExcel_Shared_OLE
         }
 
         // factor used for separating numbers into 4 bytes parts
-        $factor = pow(2, 32);
+        $factor = 2 ** 32;
 
         // days from 1-1-1601 until the beggining of UNIX era
         $days = 134774;
@@ -508,9 +510,9 @@ class PHPExcel_Shared_OLE
         }
 
         // factor used for separating numbers into 4 bytes parts
-        $factor = pow(2, 32);
-        list(, $high_part) = unpack('V', substr($string, 4, 4));
-        list(, $low_part) = unpack('V', substr($string, 0, 4));
+        $factor = 2 ** 32;
+        [, $high_part] = unpack('V', substr($string, 4, 4));
+        [, $low_part] = unpack('V', substr($string, 0, 4));
 
         $big_date = ($high_part * $factor) + $low_part;
         // translate to seconds

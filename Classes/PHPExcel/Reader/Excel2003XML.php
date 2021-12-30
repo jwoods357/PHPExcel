@@ -5,7 +5,7 @@ if (!defined('PHPEXCEL_ROOT')) {
     /**
      * @ignore
      */
-    define('PHPEXCEL_ROOT', dirname(__FILE__) . '/../../');
+    define('PHPEXCEL_ROOT', __DIR__ . '/../../');
     require(PHPEXCEL_ROOT . 'PHPExcel/Autoloader.php');
 }
 
@@ -129,7 +129,7 @@ class PHPExcel_Reader_Excel2003XML extends PHPExcel_Reader_Abstract implements P
 
         $worksheetNames = array();
 
-        $xml = simplexml_load_string($this->securityScan(file_get_contents($pFilename)), 'SimpleXMLElement', PHPExcel_Settings::getLibXmlLoaderOptions());
+        $xml = simplexml_load_string($this->securityScan(file_get_contents($pFilename)), \SimpleXMLElement::class, PHPExcel_Settings::getLibXmlLoaderOptions());
         $namespaces = $xml->getNamespaces(true);
 
         $xml_ss = $xml->children($namespaces['ss']);
@@ -157,7 +157,7 @@ class PHPExcel_Reader_Excel2003XML extends PHPExcel_Reader_Abstract implements P
 
         $worksheetInfo = array();
 
-        $xml = simplexml_load_string($this->securityScan(file_get_contents($pFilename)), 'SimpleXMLElement', PHPExcel_Settings::getLibXmlLoaderOptions());
+        $xml = simplexml_load_string($this->securityScan(file_get_contents($pFilename)), \SimpleXMLElement::class, PHPExcel_Settings::getLibXmlLoaderOptions());
         $namespaces = $xml->getNamespaces(true);
 
         $worksheetID = 1;
@@ -321,7 +321,7 @@ class PHPExcel_Reader_Excel2003XML extends PHPExcel_Reader_Abstract implements P
             throw new PHPExcel_Reader_Exception($pFilename . " is an Invalid Spreadsheet file.");
         }
 
-        $xml = simplexml_load_string($this->securityScan(file_get_contents($pFilename)), 'SimpleXMLElement', PHPExcel_Settings::getLibXmlLoaderOptions());
+        $xml = simplexml_load_string($this->securityScan(file_get_contents($pFilename)), \SimpleXMLElement::class, PHPExcel_Settings::getLibXmlLoaderOptions());
         $namespaces = $xml->getNamespaces(true);
 
         $docProps = $objPHPExcel->getProperties();
@@ -401,7 +401,7 @@ class PHPExcel_Reader_Excel2003XML extends PHPExcel_Reader_Abstract implements P
             $style_ss = $style->attributes($namespaces['ss']);
             $styleID = (string) $style_ss['ID'];
 //            echo 'Style ID = '.$styleID.'<br />';
-            $this->styles[$styleID] = (isset($this->styles['Default'])) ? $this->styles['Default'] : array();
+            $this->styles[$styleID] = $this->styles['Default'] ?? array();
             foreach ($style as $styleType => $styleData) {
                 $styleAttributes = $styleData->attributes($namespaces['ss']);
 //                echo $styleType.'<br />';
@@ -642,7 +642,7 @@ class PHPExcel_Reader_Excel2003XML extends PHPExcel_Reader_Abstract implements P
                                         $type = PHPExcel_Cell_DataType::TYPE_BOOL;
                                         $cellValue = ($cellValue != 0);
                                         break;
-                                    case 'DateTime':
+                                    case \DateTime::class:
                                         $type = PHPExcel_Cell_DataType::TYPE_NUMERIC;
                                         $cellValue = PHPExcel_Shared_Date::PHPToExcel(strtotime($cellValue));
                                         break;

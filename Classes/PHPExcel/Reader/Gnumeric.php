@@ -5,7 +5,7 @@ if (!defined('PHPEXCEL_ROOT')) {
     /**
      * @ignore
      */
-    define('PHPEXCEL_ROOT', dirname(__FILE__) . '/../../');
+    define('PHPEXCEL_ROOT', __DIR__ . '/../../');
     require(PHPEXCEL_ROOT . 'PHPExcel/Autoloader.php');
 }
 
@@ -175,6 +175,7 @@ class PHPExcel_Reader_Gnumeric extends PHPExcel_Reader_Abstract implements PHPEx
 
     private function gzfileGetContents($filename)
     {
+        $data = null;
         $file = @gzopen($filename, 'rb');
         if ($file !== false) {
             $data = '';
@@ -226,7 +227,7 @@ class PHPExcel_Reader_Gnumeric extends PHPExcel_Reader_Abstract implements PHPEx
 //        echo htmlentities($gFileData,ENT_QUOTES,'UTF-8');
 //        echo '</pre><hr />';
 //
-        $xml = simplexml_load_string($this->securityScan($gFileData), 'SimpleXMLElement', PHPExcel_Settings::getLibXmlLoaderOptions());
+        $xml = simplexml_load_string($this->securityScan($gFileData), \SimpleXMLElement::class, PHPExcel_Settings::getLibXmlLoaderOptions());
         $namespacesMeta = $xml->getNamespaces(true);
 
 //        var_dump($namespacesMeta);
@@ -289,7 +290,7 @@ class PHPExcel_Reader_Gnumeric extends PHPExcel_Reader_Abstract implements PHPEx
                             $docProps->setModified($creationDate);
                             break;
                         case 'user-defined':
-                            list(, $attrName) = explode(':', $attributes['name']);
+                            [, $attrName] = explode(':', $attributes['name']);
                             switch ($attrName) {
                                 case 'publisher':
                                     $docProps->setCompany(trim($propertyValue));
@@ -694,7 +695,7 @@ class PHPExcel_Reader_Gnumeric extends PHPExcel_Reader_Abstract implements PHPEx
                     $column = $columnAttributes['No'];
                     $columnWidth = $columnAttributes['Unit']  / 5.4;
                     $hidden = ((isset($columnAttributes['Hidden'])) && ($columnAttributes['Hidden'] == '1')) ? true : false;
-                    $columnCount = (isset($columnAttributes['Count'])) ? $columnAttributes['Count'] : 1;
+                    $columnCount = $columnAttributes['Count'] ?? 1;
                     while ($c < $column) {
                         $objPHPExcel->getActiveSheet()->getColumnDimension(PHPExcel_Cell::stringFromColumnIndex($c))->setWidth($defaultWidth);
                         ++$c;
@@ -724,7 +725,7 @@ class PHPExcel_Reader_Gnumeric extends PHPExcel_Reader_Abstract implements PHPEx
                     $row = $rowAttributes['No'];
                     $rowHeight = $rowAttributes['Unit'];
                     $hidden = ((isset($rowAttributes['Hidden'])) && ($rowAttributes['Hidden'] == '1')) ? true : false;
-                    $rowCount = (isset($rowAttributes['Count'])) ? $rowAttributes['Count'] : 1;
+                    $rowCount = $rowAttributes['Count'] ?? 1;
                     while ($r < $row) {
                         ++$r;
                         $objPHPExcel->getActiveSheet()->getRowDimension($r)->setRowHeight($defaultHeight);
@@ -841,7 +842,7 @@ class PHPExcel_Reader_Gnumeric extends PHPExcel_Reader_Abstract implements PHPEx
 
     private static function parseGnumericColour($gnmColour)
     {
-        list($gnmR, $gnmG, $gnmB) = explode(':', $gnmColour);
+        [$gnmR, $gnmG, $gnmB] = explode(':', $gnmColour);
         $gnmR = substr(str_pad($gnmR, 4, '0', STR_PAD_RIGHT), 0, 2);
         $gnmG = substr(str_pad($gnmG, 4, '0', STR_PAD_RIGHT), 0, 2);
         $gnmB = substr(str_pad($gnmB, 4, '0', STR_PAD_RIGHT), 0, 2);

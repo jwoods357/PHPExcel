@@ -5,7 +5,7 @@ if (!defined('PHPEXCEL_ROOT')) {
     /**
      * @ignore
      */
-    define('PHPEXCEL_ROOT', dirname(__FILE__) . '/../../');
+    define('PHPEXCEL_ROOT', __DIR__ . '/../../');
     require(PHPEXCEL_ROOT . 'PHPExcel/Autoloader.php');
 }
 
@@ -213,6 +213,8 @@ class PHPExcel_Reader_SYLK extends PHPExcel_Reader_Abstract implements PHPExcel_
      */
     public function loadIntoExisting($pFilename, PHPExcel $objPHPExcel)
     {
+        $startCol = null;
+        $endCol = null;
         // Open file
         $this->openFile($pFilename);
         if (!$this->isValidFormat()) {
@@ -379,7 +381,7 @@ class PHPExcel_Reader_SYLK extends PHPExcel_Reader_Abstract implements PHPExcel_
                             $formatStyle = $rowDatum;
                             break;
                         case 'W':
-                            list($startCol, $endCol, $columnWidth) = explode(' ', substr($rowDatum, 1));
+                            [$startCol, $endCol, $columnWidth] = explode(' ', substr($rowDatum, 1));
                             break;
                         case 'S':
                             $styleSettings = substr($rowDatum, 1);

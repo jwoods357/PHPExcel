@@ -23,13 +23,14 @@
         }
     ],
     "require": {
-        "php": "^5.2|^7.0",
+        "php": "^7.2",
         "ext-mbstring": "*",
         "ext-xml": "*",
         "ext-xmlwriter": "*"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "2.*"
+        "squizlabs/php_codesniffer": "2.*",
+        "rector/rector": "^0.12.9"
     },
     "recommend": {
         "ext-zip": "*",
