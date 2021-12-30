@@ -33,17 +33,17 @@ require_once PHPEXCEL_ROOT . 'PHPExcel/Shared/trend/polynomialBestFitClass.php';
  */
 class trendClass
 {
-    const TREND_LINEAR            = 'Linear';
-    const TREND_LOGARITHMIC       = 'Logarithmic';
-    const TREND_EXPONENTIAL       = 'Exponential';
-    const TREND_POWER             = 'Power';
-    const TREND_POLYNOMIAL_2      = 'Polynomial_2';
-    const TREND_POLYNOMIAL_3      = 'Polynomial_3';
-    const TREND_POLYNOMIAL_4      = 'Polynomial_4';
-    const TREND_POLYNOMIAL_5      = 'Polynomial_5';
-    const TREND_POLYNOMIAL_6      = 'Polynomial_6';
-    const TREND_BEST_FIT          = 'Bestfit';
-    const TREND_BEST_FIT_NO_POLY  = 'Bestfit_no_Polynomials';
+    public const TREND_LINEAR            = 'Linear';
+    public const TREND_LOGARITHMIC       = 'Logarithmic';
+    public const TREND_EXPONENTIAL       = 'Exponential';
+    public const TREND_POWER             = 'Power';
+    public const TREND_POLYNOMIAL_2      = 'Polynomial_2';
+    public const TREND_POLYNOMIAL_3      = 'Polynomial_3';
+    public const TREND_POLYNOMIAL_4      = 'Polynomial_4';
+    public const TREND_POLYNOMIAL_5      = 'Polynomial_5';
+    public const TREND_POLYNOMIAL_6      = 'Polynomial_6';
+    public const TREND_BEST_FIT          = 'Bestfit';
+    public const TREND_BEST_FIT_NO_POLY  = 'Bestfit_no_Polynomials';
 
     /**
      * Names of the best-fit trend analysis methods
@@ -80,9 +80,11 @@ class trendClass
 
     public static function calculate($trendType = self::TREND_BEST_FIT, $yValues, $xValues = array(), $const = true)
     {
+        $bestFitValue = [];
+        $bestFit = [];
         //    Calculate number of points in each dataset
-        $nY = count($yValues);
-        $nX = count($xValues);
+        $nY = is_array($yValues) || $yValues instanceof \Countable ? count($yValues) : 0;
+        $nX = is_array($xValues) || $xValues instanceof \Countable ? count($xValues) : 0;
 
         //    Define X Values if necessary
         if ($nX == 0) {

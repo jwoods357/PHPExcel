@@ -125,19 +125,19 @@ class PHPExcel_Writer_Excel2007 extends PHPExcel_Writer_Abstract implements PHPE
         // Assign PHPExcel
         $this->setPHPExcel($pPHPExcel);
 
-        $writerPartsArray = array(  'stringtable'       => 'PHPExcel_Writer_Excel2007_StringTable',
-                                    'contenttypes'      => 'PHPExcel_Writer_Excel2007_ContentTypes',
-                                    'docprops'          => 'PHPExcel_Writer_Excel2007_DocProps',
-                                    'rels'              => 'PHPExcel_Writer_Excel2007_Rels',
-                                    'theme'             => 'PHPExcel_Writer_Excel2007_Theme',
-                                    'style'             => 'PHPExcel_Writer_Excel2007_Style',
-                                    'workbook'          => 'PHPExcel_Writer_Excel2007_Workbook',
-                                    'worksheet'         => 'PHPExcel_Writer_Excel2007_Worksheet',
-                                    'drawing'           => 'PHPExcel_Writer_Excel2007_Drawing',
-                                    'comments'          => 'PHPExcel_Writer_Excel2007_Comments',
-                                    'chart'             => 'PHPExcel_Writer_Excel2007_Chart',
-                                    'relsvba'           => 'PHPExcel_Writer_Excel2007_RelsVBA',
-                                    'relsribbonobjects' => 'PHPExcel_Writer_Excel2007_RelsRibbon'
+        $writerPartsArray = array(  'stringtable'       => \PHPExcel_Writer_Excel2007_StringTable::class,
+                                    'contenttypes'      => \PHPExcel_Writer_Excel2007_ContentTypes::class,
+                                    'docprops'          => \PHPExcel_Writer_Excel2007_DocProps::class,
+                                    'rels'              => \PHPExcel_Writer_Excel2007_Rels::class,
+                                    'theme'             => \PHPExcel_Writer_Excel2007_Theme::class,
+                                    'style'             => \PHPExcel_Writer_Excel2007_Style::class,
+                                    'workbook'          => \PHPExcel_Writer_Excel2007_Workbook::class,
+                                    'worksheet'         => \PHPExcel_Writer_Excel2007_Worksheet::class,
+                                    'drawing'           => \PHPExcel_Writer_Excel2007_Drawing::class,
+                                    'comments'          => \PHPExcel_Writer_Excel2007_Comments::class,
+                                    'chart'             => \PHPExcel_Writer_Excel2007_Chart::class,
+                                    'relsvba'           => \PHPExcel_Writer_Excel2007_RelsVBA::class,
+                                    'relsribbonobjects' => \PHPExcel_Writer_Excel2007_RelsRibbon::class
                                  );
 
         //    Initialise writer parts
@@ -278,7 +278,7 @@ class PHPExcel_Writer_Excel2007 extends PHPExcel_Writer_Abstract implements PHPE
             }
 
             // Add theme to ZIP file
-            $objZip->addFromString('xl/theme/theme1.xml', $this->getWriterPart('Theme')->writeTheme($this->spreadSheet));
+            $objZip->addFromString('xl/theme/theme1.xml', $this->getWriterPart(\Theme::class)->writeTheme($this->spreadSheet));
 
             // Add string table to ZIP file
             $objZip->addFromString('xl/sharedStrings.xml', $this->getWriterPart('StringTable')->writeStringTable($this->stringTable));

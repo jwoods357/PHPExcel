@@ -63,6 +63,7 @@ class PHPExcel_Reader_Excel2007_Chart
 
     public static function readChart($chartElements, $chartName)
     {
+        $plotArea = null;
         $namespacesChartMeta = $chartElements->getNamespaces(true);
         $chartElementsC = $chartElements->children($namespacesChartMeta['c']);
 
@@ -81,7 +82,7 @@ class PHPExcel_Reader_Excel2007_Chart
                                 foreach ($chartDetails as $chartDetailKey => $chartDetail) {
                                     switch ($chartDetailKey) {
                                         case "layout":
-                                            $plotAreaLayout = self::chartLayoutDetails($chartDetail, $namespacesChartMeta, 'plotArea');
+                                            $plotAreaLayout = self::chartLayoutDetails($chartDetail, $namespacesChartMeta);
                                             break;
                                         case "catAx":
                                             if (isset($chartDetail->title)) {
@@ -188,7 +189,7 @@ class PHPExcel_Reader_Excel2007_Chart
                                             $legendOverlay = self::getAttribute($chartDetail, 'val', 'boolean');
                                             break;
                                         case "layout":
-                                            $legendLayout = self::chartLayoutDetails($chartDetail, $namespacesChartMeta, 'legend');
+                                            $legendLayout = self::chartLayoutDetails($chartDetail, $namespacesChartMeta);
                                             break;
                                     }
                                 }
@@ -312,13 +313,13 @@ class PHPExcel_Reader_Excel2007_Chart
         } elseif (isset($seriesDetail->multiLvlStrRef)) {
             $seriesSource = (string) $seriesDetail->multiLvlStrRef->f;
             $seriesData = self::chartDataSeriesValuesMultiLevel($seriesDetail->multiLvlStrRef->multiLvlStrCache->children($namespacesChartMeta['c']), 's');
-            $seriesData['pointCount'] = count($seriesData['dataValues']);
+            $seriesData['pointCount'] = is_array($seriesData['dataValues']) || $seriesData['dataValues'] instanceof \Countable ? count($seriesData['dataValues']) : 0;
 
             return new PHPExcel_Chart_DataSeriesValues('String', $seriesSource, $seriesData['formatCode'], $seriesData['pointCount'], $seriesData['dataValues'], $marker, $smoothLine);
         } elseif (isset($seriesDetail->multiLvlNumRef)) {
             $seriesSource = (string) $seriesDetail->multiLvlNumRef->f;
             $seriesData = self::chartDataSeriesValuesMultiLevel($seriesDetail->multiLvlNumRef->multiLvlNumCache->children($namespacesChartMeta['c']), 's');
-            $seriesData['pointCount'] = count($seriesData['dataValues']);
+            $seriesData['pointCount'] = is_array($seriesData['dataValues']) || $seriesData['dataValues'] instanceof \Countable ? count($seriesData['dataValues']) : 0;
 
             return new PHPExcel_Chart_DataSeriesValues('String', $seriesSource, $seriesData['formatCode'], $seriesData['pointCount'], $seriesData['dataValues'], $marker, $smoothLine);
         }

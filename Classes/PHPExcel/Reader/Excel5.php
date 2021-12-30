@@ -5,7 +5,7 @@ if (!defined('PHPEXCEL_ROOT')) {
     /**
      * @ignore
      */
-    define('PHPEXCEL_ROOT', dirname(__FILE__) . '/../../');
+    define('PHPEXCEL_ROOT', __DIR__ . '/../../');
     require(PHPEXCEL_ROOT . 'PHPExcel/Autoloader.php');
 }
 
@@ -68,94 +68,94 @@ if (!defined('PHPEXCEL_ROOT')) {
 class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExcel_Reader_IReader
 {
     // ParseXL definitions
-    const XLS_BIFF8                     = 0x0600;
-    const XLS_BIFF7                     = 0x0500;
-    const XLS_WorkbookGlobals           = 0x0005;
-    const XLS_Worksheet                 = 0x0010;
+    public const XLS_BIFF8                     = 0x0600;
+    public const XLS_BIFF7                     = 0x0500;
+    public const XLS_WorkbookGlobals           = 0x0005;
+    public const XLS_Worksheet                 = 0x0010;
 
     // record identifiers
-    const XLS_TYPE_FORMULA              = 0x0006;
-    const XLS_TYPE_EOF                  = 0x000a;
-    const XLS_TYPE_PROTECT              = 0x0012;
-    const XLS_TYPE_OBJECTPROTECT        = 0x0063;
-    const XLS_TYPE_SCENPROTECT          = 0x00dd;
-    const XLS_TYPE_PASSWORD             = 0x0013;
-    const XLS_TYPE_HEADER               = 0x0014;
-    const XLS_TYPE_FOOTER               = 0x0015;
-    const XLS_TYPE_EXTERNSHEET          = 0x0017;
-    const XLS_TYPE_DEFINEDNAME          = 0x0018;
-    const XLS_TYPE_VERTICALPAGEBREAKS   = 0x001a;
-    const XLS_TYPE_HORIZONTALPAGEBREAKS = 0x001b;
-    const XLS_TYPE_NOTE                 = 0x001c;
-    const XLS_TYPE_SELECTION            = 0x001d;
-    const XLS_TYPE_DATEMODE             = 0x0022;
-    const XLS_TYPE_EXTERNNAME           = 0x0023;
-    const XLS_TYPE_LEFTMARGIN           = 0x0026;
-    const XLS_TYPE_RIGHTMARGIN          = 0x0027;
-    const XLS_TYPE_TOPMARGIN            = 0x0028;
-    const XLS_TYPE_BOTTOMMARGIN         = 0x0029;
-    const XLS_TYPE_PRINTGRIDLINES       = 0x002b;
-    const XLS_TYPE_FILEPASS             = 0x002f;
-    const XLS_TYPE_FONT                 = 0x0031;
-    const XLS_TYPE_CONTINUE             = 0x003c;
-    const XLS_TYPE_PANE                 = 0x0041;
-    const XLS_TYPE_CODEPAGE             = 0x0042;
-    const XLS_TYPE_DEFCOLWIDTH          = 0x0055;
-    const XLS_TYPE_OBJ                  = 0x005d;
-    const XLS_TYPE_COLINFO              = 0x007d;
-    const XLS_TYPE_IMDATA               = 0x007f;
-    const XLS_TYPE_SHEETPR              = 0x0081;
-    const XLS_TYPE_HCENTER              = 0x0083;
-    const XLS_TYPE_VCENTER              = 0x0084;
-    const XLS_TYPE_SHEET                = 0x0085;
-    const XLS_TYPE_PALETTE              = 0x0092;
-    const XLS_TYPE_SCL                  = 0x00a0;
-    const XLS_TYPE_PAGESETUP            = 0x00a1;
-    const XLS_TYPE_MULRK                = 0x00bd;
-    const XLS_TYPE_MULBLANK             = 0x00be;
-    const XLS_TYPE_DBCELL               = 0x00d7;
-    const XLS_TYPE_XF                   = 0x00e0;
-    const XLS_TYPE_MERGEDCELLS          = 0x00e5;
-    const XLS_TYPE_MSODRAWINGGROUP      = 0x00eb;
-    const XLS_TYPE_MSODRAWING           = 0x00ec;
-    const XLS_TYPE_SST                  = 0x00fc;
-    const XLS_TYPE_LABELSST             = 0x00fd;
-    const XLS_TYPE_EXTSST               = 0x00ff;
-    const XLS_TYPE_EXTERNALBOOK         = 0x01ae;
-    const XLS_TYPE_DATAVALIDATIONS      = 0x01b2;
-    const XLS_TYPE_TXO                  = 0x01b6;
-    const XLS_TYPE_HYPERLINK            = 0x01b8;
-    const XLS_TYPE_DATAVALIDATION       = 0x01be;
-    const XLS_TYPE_DIMENSION            = 0x0200;
-    const XLS_TYPE_BLANK                = 0x0201;
-    const XLS_TYPE_NUMBER               = 0x0203;
-    const XLS_TYPE_LABEL                = 0x0204;
-    const XLS_TYPE_BOOLERR              = 0x0205;
-    const XLS_TYPE_STRING               = 0x0207;
-    const XLS_TYPE_ROW                  = 0x0208;
-    const XLS_TYPE_INDEX                = 0x020b;
-    const XLS_TYPE_ARRAY                = 0x0221;
-    const XLS_TYPE_DEFAULTROWHEIGHT     = 0x0225;
-    const XLS_TYPE_WINDOW2              = 0x023e;
-    const XLS_TYPE_RK                   = 0x027e;
-    const XLS_TYPE_STYLE                = 0x0293;
-    const XLS_TYPE_FORMAT               = 0x041e;
-    const XLS_TYPE_SHAREDFMLA           = 0x04bc;
-    const XLS_TYPE_BOF                  = 0x0809;
-    const XLS_TYPE_SHEETPROTECTION      = 0x0867;
-    const XLS_TYPE_RANGEPROTECTION      = 0x0868;
-    const XLS_TYPE_SHEETLAYOUT          = 0x0862;
-    const XLS_TYPE_XFEXT                = 0x087d;
-    const XLS_TYPE_PAGELAYOUTVIEW       = 0x088b;
-    const XLS_TYPE_UNKNOWN              = 0xffff;
+    public const XLS_TYPE_FORMULA              = 0x0006;
+    public const XLS_TYPE_EOF                  = 0x000a;
+    public const XLS_TYPE_PROTECT              = 0x0012;
+    public const XLS_TYPE_OBJECTPROTECT        = 0x0063;
+    public const XLS_TYPE_SCENPROTECT          = 0x00dd;
+    public const XLS_TYPE_PASSWORD             = 0x0013;
+    public const XLS_TYPE_HEADER               = 0x0014;
+    public const XLS_TYPE_FOOTER               = 0x0015;
+    public const XLS_TYPE_EXTERNSHEET          = 0x0017;
+    public const XLS_TYPE_DEFINEDNAME          = 0x0018;
+    public const XLS_TYPE_VERTICALPAGEBREAKS   = 0x001a;
+    public const XLS_TYPE_HORIZONTALPAGEBREAKS = 0x001b;
+    public const XLS_TYPE_NOTE                 = 0x001c;
+    public const XLS_TYPE_SELECTION            = 0x001d;
+    public const XLS_TYPE_DATEMODE             = 0x0022;
+    public const XLS_TYPE_EXTERNNAME           = 0x0023;
+    public const XLS_TYPE_LEFTMARGIN           = 0x0026;
+    public const XLS_TYPE_RIGHTMARGIN          = 0x0027;
+    public const XLS_TYPE_TOPMARGIN            = 0x0028;
+    public const XLS_TYPE_BOTTOMMARGIN         = 0x0029;
+    public const XLS_TYPE_PRINTGRIDLINES       = 0x002b;
+    public const XLS_TYPE_FILEPASS             = 0x002f;
+    public const XLS_TYPE_FONT                 = 0x0031;
+    public const XLS_TYPE_CONTINUE             = 0x003c;
+    public const XLS_TYPE_PANE                 = 0x0041;
+    public const XLS_TYPE_CODEPAGE             = 0x0042;
+    public const XLS_TYPE_DEFCOLWIDTH          = 0x0055;
+    public const XLS_TYPE_OBJ                  = 0x005d;
+    public const XLS_TYPE_COLINFO              = 0x007d;
+    public const XLS_TYPE_IMDATA               = 0x007f;
+    public const XLS_TYPE_SHEETPR              = 0x0081;
+    public const XLS_TYPE_HCENTER              = 0x0083;
+    public const XLS_TYPE_VCENTER              = 0x0084;
+    public const XLS_TYPE_SHEET                = 0x0085;
+    public const XLS_TYPE_PALETTE              = 0x0092;
+    public const XLS_TYPE_SCL                  = 0x00a0;
+    public const XLS_TYPE_PAGESETUP            = 0x00a1;
+    public const XLS_TYPE_MULRK                = 0x00bd;
+    public const XLS_TYPE_MULBLANK             = 0x00be;
+    public const XLS_TYPE_DBCELL               = 0x00d7;
+    public const XLS_TYPE_XF                   = 0x00e0;
+    public const XLS_TYPE_MERGEDCELLS          = 0x00e5;
+    public const XLS_TYPE_MSODRAWINGGROUP      = 0x00eb;
+    public const XLS_TYPE_MSODRAWING           = 0x00ec;
+    public const XLS_TYPE_SST                  = 0x00fc;
+    public const XLS_TYPE_LABELSST             = 0x00fd;
+    public const XLS_TYPE_EXTSST               = 0x00ff;
+    public const XLS_TYPE_EXTERNALBOOK         = 0x01ae;
+    public const XLS_TYPE_DATAVALIDATIONS      = 0x01b2;
+    public const XLS_TYPE_TXO                  = 0x01b6;
+    public const XLS_TYPE_HYPERLINK            = 0x01b8;
+    public const XLS_TYPE_DATAVALIDATION       = 0x01be;
+    public const XLS_TYPE_DIMENSION            = 0x0200;
+    public const XLS_TYPE_BLANK                = 0x0201;
+    public const XLS_TYPE_NUMBER               = 0x0203;
+    public const XLS_TYPE_LABEL                = 0x0204;
+    public const XLS_TYPE_BOOLERR              = 0x0205;
+    public const XLS_TYPE_STRING               = 0x0207;
+    public const XLS_TYPE_ROW                  = 0x0208;
+    public const XLS_TYPE_INDEX                = 0x020b;
+    public const XLS_TYPE_ARRAY                = 0x0221;
+    public const XLS_TYPE_DEFAULTROWHEIGHT     = 0x0225;
+    public const XLS_TYPE_WINDOW2              = 0x023e;
+    public const XLS_TYPE_RK                   = 0x027e;
+    public const XLS_TYPE_STYLE                = 0x0293;
+    public const XLS_TYPE_FORMAT               = 0x041e;
+    public const XLS_TYPE_SHAREDFMLA           = 0x04bc;
+    public const XLS_TYPE_BOF                  = 0x0809;
+    public const XLS_TYPE_SHEETPROTECTION      = 0x0867;
+    public const XLS_TYPE_RANGEPROTECTION      = 0x0868;
+    public const XLS_TYPE_SHEETLAYOUT          = 0x0862;
+    public const XLS_TYPE_XFEXT                = 0x087d;
+    public const XLS_TYPE_PAGELAYOUTVIEW       = 0x088b;
+    public const XLS_TYPE_UNKNOWN              = 0xffff;
 
     // Encryption type
-    const MS_BIFF_CRYPTO_NONE           = 0;
-    const MS_BIFF_CRYPTO_XOR            = 1;
-    const MS_BIFF_CRYPTO_RC4            = 2;
+    public const MS_BIFF_CRYPTO_NONE           = 0;
+    public const MS_BIFF_CRYPTO_XOR            = 1;
+    public const MS_BIFF_CRYPTO_RC4            = 2;
     
     // Size of stream blocks when using RC4 encryption
-    const REKEY_BLOCK                   = 0x400;
+    public const REKEY_BLOCK                   = 0x400;
 
     /**
      * Summary Information stream data.
@@ -1025,8 +1025,8 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
                     }
 
                     // calculate the width and height of the shape
-                    list($startColumn, $startRow) = PHPExcel_Cell::coordinateFromString($spContainer->getStartCoordinates());
-                    list($endColumn, $endRow) = PHPExcel_Cell::coordinateFromString($spContainer->getEndCoordinates());
+                    [$startColumn, $startRow] = PHPExcel_Cell::coordinateFromString($spContainer->getStartCoordinates());
+                    [$endColumn, $endRow] = PHPExcel_Cell::coordinateFromString($spContainer->getEndCoordinates());
 
                     $startOffsetX = $spContainer->getStartOffsetX();
                     $startOffsetY = $spContainer->getStartOffsetY();
@@ -1101,7 +1101,7 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
             // treat SHAREDFMLA records
             if ($this->version == self::XLS_BIFF8) {
                 foreach ($this->sharedFormulaParts as $cell => $baseCell) {
-                    list($column, $row) = PHPExcel_Cell::coordinateFromString($cell);
+                    [$column, $row] = PHPExcel_Cell::coordinateFromString($cell);
                     if (($this->getReadFilter() !== null) && $this->getReadFilter()->readCell($column, $row, $this->phpSheet->getTitle())) {
                         $formula = $this->getFormulaFromStructure($this->sharedFormulas[$baseCell], $cell);
                         $this->phpSheet->getCell($cell)->setValueExplicit('=' . $formula, PHPExcel_Cell_DataType::TYPE_FORMULA);
@@ -1179,8 +1179,8 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
 
                                     $coordinateStrings = explode(':', $extractedRange);
                                     if (count($coordinateStrings) == 2) {
-                                        list($firstColumn, $firstRow) = PHPExcel_Cell::coordinateFromString($coordinateStrings[0]);
-                                        list($lastColumn, $lastRow) = PHPExcel_Cell::coordinateFromString($coordinateStrings[1]);
+                                        [$firstColumn, $firstRow] = PHPExcel_Cell::coordinateFromString($coordinateStrings[0]);
+                                        [$lastColumn, $lastRow] = PHPExcel_Cell::coordinateFromString($coordinateStrings[1]);
 
                                         if ($firstColumn == 'A' and $lastColumn == 'IV') {
                                             // then we have repeating rows
@@ -1623,7 +1623,8 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
                 //        max 2048 bytes will probably throw a wobbly.
                 $row = self::getInt2d($recordData, 0);
                 $extension = true;
-                $cellAddress = array_pop(array_keys($this->phpSheet->getComments()));
+                $arrayKeys = array_keys($this->phpSheet->getComments());
+                $cellAddress = array_pop($arrayKeys);
             }
 //            echo 'Note Address=', $cellAddress,'<br />';
 
@@ -2865,6 +2866,9 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
      **/
     private function readSst()
     {
+        $limitpos = null;
+        $formattingRuns = null;
+        $extendedRunLength = null;
         // offset within (spliced) record data
         $pos = 0;
 
@@ -3701,7 +3705,7 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
                 // then we should treat as rich text
                 $richText = new PHPExcel_RichText();
                 $charPos = 0;
-                $sstCount = count($this->sst[$index]['fmtRuns']);
+                $sstCount = is_array($this->sst[$index]['fmtRuns']) || $this->sst[$index]['fmtRuns'] instanceof \Countable ? count($this->sst[$index]['fmtRuns']) : 0;
                 for ($i = 0; $i <= $sstCount; ++$i) {
                     if (isset($fmtRuns[$i])) {
                         $text = PHPExcel_Shared_String::Substring($this->sst[$index]['value'], $charPos, $fmtRuns[$i]['charPos'] - $charPos);
@@ -4279,6 +4283,8 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
      */
     private function readWindow2()
     {
+        $zoomscaleInPageBreakPreview = null;
+        $zoomscaleInNormalView = null;
         $length = self::getInt2d($this->data, $this->pos + 2);
         $recordData = $this->readRecordData($this->data, $this->pos + 4, $length);
 
@@ -4548,7 +4554,7 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
         if (!$this->readDataOnly) {
             // offset: 0; size: 8; cell range address of all cells containing this hyperlink
             try {
-                $cellRange = $this->readBIFF8CellRangeAddressFixed($recordData, 0, 8);
+                $cellRange = $this->readBIFF8CellRangeAddressFixed($recordData);
             } catch (PHPExcel_Exception $e) {
                 return;
             }
@@ -5116,6 +5122,7 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
      */
     private function readImData()
     {
+        $filename = null;
         $length = self::getInt2d($this->data, $this->pos + 2);
 
         // get spliced record data
@@ -5362,12 +5369,12 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
         $formulaStrings = array();
         foreach ($tokens as $token) {
             // initialize spaces
-            $space0 = isset($space0) ? $space0 : ''; // spaces before next token, not tParen
-            $space1 = isset($space1) ? $space1 : ''; // carriage returns before next token, not tParen
-            $space2 = isset($space2) ? $space2 : ''; // spaces before opening parenthesis
-            $space3 = isset($space3) ? $space3 : ''; // carriage returns before opening parenthesis
-            $space4 = isset($space4) ? $space4 : ''; // spaces before closing parenthesis
-            $space5 = isset($space5) ? $space5 : ''; // carriage returns before closing parenthesis
+            $space0 = $space0 ?? ''; // spaces before next token, not tParen
+            $space1 = $space1 ?? ''; // carriage returns before next token, not tParen
+            $space2 = $space2 ?? ''; // spaces before opening parenthesis
+            $space3 = $space3 ?? ''; // carriage returns before opening parenthesis
+            $space4 = $space4 ?? ''; // spaces before closing parenthesis
+            $space5 = $space5 ?? ''; // carriage returns before closing parenthesis
 
             switch ($token['name']) {
                 case 'tAdd': // addition
@@ -6836,7 +6843,7 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
      */
     private function readBIFF8CellAddressB($cellAddressStructure, $baseCell = 'A1')
     {
-        list($baseCol, $baseRow) = PHPExcel_Cell::coordinateFromString($baseCell);
+        [$baseCol, $baseRow] = PHPExcel_Cell::coordinateFromString($baseCell);
         $baseCol = PHPExcel_Cell::columnIndexFromString($baseCol) - 1;
 
         // offset: 0; size: 2; index to row (0... 65535) (or offset (-32768... 32767))
@@ -7010,7 +7017,7 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
      */
     private function readBIFF8CellRangeAddressB($subData, $baseCell = 'A1')
     {
-        list($baseCol, $baseRow) = PHPExcel_Cell::coordinateFromString($baseCell);
+        [$baseCol, $baseRow] = PHPExcel_Cell::coordinateFromString($baseCell);
         $baseCol = PHPExcel_Cell::columnIndexFromString($baseCol) - 1;
 
         // TODO: if cell range is just a single cell, should this funciton
@@ -7465,13 +7472,13 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
         $mantissa = (0x100000 | ($rknumhigh & 0x000fffff));
         $mantissalow1 = ($rknumlow & 0x80000000) >> 31;
         $mantissalow2 = ($rknumlow & 0x7fffffff);
-        $value = $mantissa / pow(2, (20 - $exp));
+        $value = $mantissa / 2 ** (20 - $exp);
 
         if ($mantissalow1 != 0) {
-            $value += 1 / pow(2, (21 - $exp));
+            $value += 1 / 2 ** (21 - $exp);
         }
 
-        $value += $mantissalow2 / pow(2, (52 - $exp));
+        $value += $mantissalow2 / 2 ** (52 - $exp);
         if ($sign) {
             $value *= -1;
         }
@@ -7493,7 +7500,7 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
             $sign = ($rknum & 0x80000000) >> 31;
             $exp = ($rknum & 0x7ff00000) >> 20;
             $mantissa = (0x100000 | ($rknum & 0x000ffffc));
-            $value = $mantissa / pow(2, (20- ($exp - 1023)));
+            $value = $mantissa / 2 ** (20- ($exp - 1023));
             if ($sign) {
                 $value = -1 * $value;
             }

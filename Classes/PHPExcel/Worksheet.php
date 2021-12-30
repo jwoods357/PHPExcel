@@ -28,14 +28,14 @@
 class PHPExcel_Worksheet implements PHPExcel_IComparable
 {
     /* Break types */
-    const BREAK_NONE   = 0;
-    const BREAK_ROW    = 1;
-    const BREAK_COLUMN = 2;
+    public const BREAK_NONE   = 0;
+    public const BREAK_ROW    = 1;
+    public const BREAK_COLUMN = 2;
 
     /* Sheet state */
-    const SHEETSTATE_VISIBLE    = 'visible';
-    const SHEETSTATE_HIDDEN     = 'hidden';
-    const SHEETSTATE_VERYHIDDEN = 'veryHidden';
+    public const SHEETSTATE_VISIBLE    = 'visible';
+    public const SHEETSTATE_HIDDEN     = 'hidden';
+    public const SHEETSTATE_VERYHIDDEN = 'veryHidden';
 
     /**
      * Invalid characters in sheet title
@@ -1543,7 +1543,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
         }
 
         // Calculate range outer borders
-        list($rangeStart, $rangeEnd) = PHPExcel_Cell::rangeBoundaries($pRange . ':' . $pRange);
+        [$rangeStart, $rangeEnd] = PHPExcel_Cell::rangeBoundaries($pRange . ':' . $pRange);
 
         // Make sure we can loop upwards on rows and columns
         if ($rangeStart[0] > $rangeEnd[0] && $rangeStart[1] > $rangeEnd[1]) {
@@ -1581,7 +1581,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
         }
 
         // Calculate range outer borders
-        list($rangeStart, $rangeEnd) = PHPExcel_Cell::rangeBoundaries($pRange . ':' . $pRange);
+        [$rangeStart, $rangeEnd] = PHPExcel_Cell::rangeBoundaries($pRange . ':' . $pRange);
 
         // Make sure we can loop upwards on rows and columns
         if ($rangeStart[0] > $rangeEnd[0] && $rangeStart[1] > $rangeEnd[1]) {
@@ -1865,7 +1865,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
     public function unprotectCellsByColumnAndRow($pColumn1 = 0, $pRow1 = 1, $pColumn2 = 0, $pRow2 = 1, $pPassword = '', $pAlreadyHashed = false)
     {
         $cellRange = PHPExcel_Cell::stringFromColumnIndex($pColumn1) . $pRow1 . ':' . PHPExcel_Cell::stringFromColumnIndex($pColumn2) . $pRow2;
-        return $this->unprotectCells($cellRange, $pPassword, $pAlreadyHashed);
+        return $this->unprotectCells($cellRange);
     }
 
     /**
@@ -2358,7 +2358,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
         $pCoordinate = preg_replace('/^([0-9]+):([0-9]+)$/', 'A${1}:XFD${2}', $pCoordinate);
 
         if (strpos($pCoordinate, ':') !== false || strpos($pCoordinate, ',') !== false) {
-            list($first, ) = PHPExcel_Cell::splitRange($pCoordinate);
+            [$first, ] = PHPExcel_Cell::splitRange($pCoordinate);
             $this->activeCell = $first[0];
         } else {
             $this->activeCell = $pCoordinate;
@@ -2421,7 +2421,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
             }
 
             // start coordinate
-            list ($startColumn, $startRow) = PHPExcel_Cell::coordinateFromString($startCell);
+            [$startColumn, $startRow] = PHPExcel_Cell::coordinateFromString($startCell);
 
             // Loop through $source
             foreach ($source as $rowData) {
@@ -2464,7 +2464,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
         // Returnvalue
         $returnValue = array();
         //    Identify the range that we need to extract from the worksheet
-        list($rangeStart, $rangeEnd) = PHPExcel_Cell::rangeBoundaries($pRange);
+        [$rangeStart, $rangeEnd] = PHPExcel_Cell::rangeBoundaries($pRange);
         $minCol = PHPExcel_Cell::stringFromColumnIndex($rangeStart[0] -1);
         $minRow = $rangeStart[1];
         $maxCol = PHPExcel_Cell::stringFromColumnIndex($rangeEnd[0] -1);
@@ -2645,7 +2645,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
     public function getHashCode()
     {
         if ($this->dirty) {
-            $this->hash = md5($this->title . $this->autoFilter . ($this->protection->isProtectionEnabled() ? 't' : 'f') . __CLASS__);
+            $this->hash = md5($this->title . $this->autoFilter . ($this->protection->isProtectionEnabled() ? 't' : 'f') . self::class);
             $this->dirty = false;
         }
         return $this->hash;

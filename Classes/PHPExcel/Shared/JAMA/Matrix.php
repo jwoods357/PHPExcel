@@ -8,7 +8,7 @@ if (!defined('PHPEXCEL_ROOT')) {
     /**
      * @ignore
      */
-    define('PHPEXCEL_ROOT', dirname(__FILE__) . '/../../../');
+    define('PHPEXCEL_ROOT', __DIR__ . '/../../../');
     require(PHPEXCEL_ROOT . 'PHPExcel/Autoloader.php');
 }
 
@@ -26,11 +26,11 @@ if (!defined('PHPEXCEL_ROOT')) {
  */
 class PHPExcel_Shared_JAMA_Matrix
 {
-    const POLYMORPHIC_ARGUMENT_EXCEPTION = "Invalid argument pattern for polymorphic function.";
-    const ARGUMENT_TYPE_EXCEPTION        = "Invalid argument type.";
-    const ARGUMENT_BOUNDS_EXCEPTION      = "Invalid argument range.";
-    const MATRIX_DIMENSION_EXCEPTION     = "Matrix dimensions are not equal.";
-    const ARRAY_LENGTH_EXCEPTION         = "Array length must be a multiple of m.";
+    public const POLYMORPHIC_ARGUMENT_EXCEPTION = "Invalid argument pattern for polymorphic function.";
+    public const ARGUMENT_TYPE_EXCEPTION        = "Invalid argument type.";
+    public const ARGUMENT_BOUNDS_EXCEPTION      = "Invalid argument range.";
+    public const MATRIX_DIMENSION_EXCEPTION     = "Matrix dimensions are not equal.";
+    public const ARRAY_LENGTH_EXCEPTION         = "Array length must be a multiple of m.";
 
     /**
      *    Matrix storage
@@ -70,8 +70,8 @@ class PHPExcel_Shared_JAMA_Matrix
             switch ($match) {
                 //Rectangular matrix - m x n initialized from 2D array
                 case 'array':
-                    $this->m = count($args[0]);
-                    $this->n = count($args[0][0]);
+                    $this->m = is_array($args[0]) || $args[0] instanceof \Countable ? count($args[0]) : 0;
+                    $this->n = is_array($args[0][0]) || $args[0][0] instanceof \Countable ? count($args[0][0]) : 0;
                     $this->A = $args[0];
                     break;
                 //Square matrix - n x n
@@ -90,11 +90,11 @@ class PHPExcel_Shared_JAMA_Matrix
                 case 'array,integer':
                     $this->m = $args[1];
                     if ($this->m != 0) {
-                        $this->n = count($args[0]) / $this->m;
+                        $this->n = (is_array($args[0]) || $args[0] instanceof \Countable ? count($args[0]) : 0) / $this->m;
                     } else {
                         $this->n = 0;
                     }
-                    if (($this->m * $this->n) == count($args[0])) {
+                    if (($this->m * $this->n) == (is_array($args[0]) || $args[0] instanceof \Countable ? count($args[0]) : 0)) {
                         for ($i = 0; $i < $this->m; ++$i) {
                             for ($j = 0; $j < $this->n; ++$j) {
                                 $this->A[$i][$j] = $args[0][$i + $j * $this->m];
@@ -168,6 +168,9 @@ class PHPExcel_Shared_JAMA_Matrix
      */
     public function getMatrix()
     {
+        $i0 = null;
+        $j0 = null;
+        $RL = [];
         if (func_num_args() > 0) {
             $args = func_get_args();
             $match = implode(",", array_map('gettype', $args));
@@ -175,7 +178,7 @@ class PHPExcel_Shared_JAMA_Matrix
             switch ($match) {
                 //A($i0...; $j0...)
                 case 'integer,integer':
-                    list($i0, $j0) = $args;
+                    [$i0, $j0] = $args;
                     if ($i0 >= 0) {
                         $m = $this->m - $i0;
                     } else {
@@ -196,7 +199,7 @@ class PHPExcel_Shared_JAMA_Matrix
                     break;
                 //A($i0...$iF; $j0...$jF)
                 case 'integer,integer,integer,integer':
-                    list($i0, $iF, $j0, $jF) = $args;
+                    [$i0, $iF, $j0, $jF] = $args;
                     if (($iF > $i0) && ($this->m >= $iF) && ($i0 >= 0)) {
                         $m = $iF - $i0;
                     } else {
@@ -217,14 +220,14 @@ class PHPExcel_Shared_JAMA_Matrix
                     break;
                 //$R = array of row indices; $C = array of column indices
                 case 'array,array':
-                    list($RL, $CL) = $args;
-                    if (count($RL) > 0) {
-                        $m = count($RL);
+                    [$RL, $CL] = $args;
+                    if ((is_array($RL) || $RL instanceof \Countable ? count($RL) : 0) > 0) {
+                        $m = is_array($RL) || $RL instanceof \Countable ? count($RL) : 0;
                     } else {
                         throw new PHPExcel_Calculation_Exception(self::ARGUMENT_BOUNDS_EXCEPTION);
                     }
-                    if (count($CL) > 0) {
-                        $n = count($CL);
+                    if ((is_array($CL) || $CL instanceof \Countable ? count($CL) : 0) > 0) {
+                        $n = is_array($CL) || $CL instanceof \Countable ? count($CL) : 0;
                     } else {
                         throw new PHPExcel_Calculation_Exception(self::ARGUMENT_BOUNDS_EXCEPTION);
                     }
@@ -238,14 +241,14 @@ class PHPExcel_Shared_JAMA_Matrix
                     break;
                 //$RL = array of row indices; $CL = array of column indices
                 case 'array,array':
-                    list($RL, $CL) = $args;
-                    if (count($RL) > 0) {
-                        $m = count($RL);
+                    [$RL, $CL] = $args;
+                    if ((is_array($RL) || $RL instanceof \Countable ? count($RL) : 0) > 0) {
+                        $m = is_array($RL) || $RL instanceof \Countable ? count($RL) : 0;
                     } else {
                         throw new PHPExcel_Calculation_Exception(self::ARGUMENT_BOUNDS_EXCEPTION);
                     }
-                    if (count($CL) > 0) {
-                        $n = count($CL);
+                    if ((is_array($CL) || $CL instanceof \Countable ? count($CL) : 0) > 0) {
+                        $n = is_array($CL) || $CL instanceof \Countable ? count($CL) : 0;
                     } else {
                         throw new PHPExcel_Calculation_Exception(self::ARGUMENT_BOUNDS_EXCEPTION);
                     }
@@ -259,14 +262,14 @@ class PHPExcel_Shared_JAMA_Matrix
                     break;
                 //A($i0...$iF); $CL = array of column indices
                 case 'integer,integer,array':
-                    list($i0, $iF, $CL) = $args;
+                    [$i0, $iF, $CL] = $args;
                     if (($iF > $i0) && ($this->m >= $iF) && ($i0 >= 0)) {
                         $m = $iF - $i0;
                     } else {
                         throw new PHPExcel_Calculation_Exception(self::ARGUMENT_BOUNDS_EXCEPTION);
                     }
-                    if (count($CL) > 0) {
-                        $n = count($CL);
+                    if ((is_array($CL) || $CL instanceof \Countable ? count($CL) : 0) > 0) {
+                        $n = is_array($CL) || $CL instanceof \Countable ? count($CL) : 0;
                     } else {
                         throw new PHPExcel_Calculation_Exception(self::ARGUMENT_BOUNDS_EXCEPTION);
                     }
@@ -280,9 +283,9 @@ class PHPExcel_Shared_JAMA_Matrix
                     break;
                 //$RL = array of row indices
                 case 'array,integer,integer':
-                    list($RL, $j0, $jF) = $args;
-                    if (count($RL) > 0) {
-                        $m = count($RL);
+                    [$RL, $j0, $jF] = $args;
+                    if ((is_array($RL) || $RL instanceof \Countable ? count($RL) : 0) > 0) {
+                        $m = is_array($RL) || $RL instanceof \Countable ? count($RL) : 0;
                     } else {
                         throw new PHPExcel_Calculation_Exception(self::ARGUMENT_BOUNDS_EXCEPTION);
                     }
@@ -939,6 +942,7 @@ class PHPExcel_Shared_JAMA_Matrix
      */
     public function times()
     {
+        $Bcolj = [];
         if (func_num_args() > 0) {
             $args  = func_get_args();
             $match = implode(",", array_map('gettype', $args));
@@ -1067,7 +1071,7 @@ class PHPExcel_Shared_JAMA_Matrix
                         $validValues &= PHPExcel_Shared_String::convertToNumberIfFraction($value);
                     }
                     if ($validValues) {
-                        $this->A[$i][$j] = pow($this->A[$i][$j], $value);
+                        $this->A[$i][$j] = $this->A[$i][$j] ** $value;
                     } else {
                         $this->A[$i][$j] = PHPExcel_Calculation_Functions::NaN();
                     }

@@ -78,7 +78,7 @@ class PHPExcel_Writer_Excel5_Escher
         $this->data = '';
 
         switch (get_class($this->object)) {
-            case 'PHPExcel_Shared_Escher':
+            case \PHPExcel_Shared_Escher::class:
                 if ($dggContainer = $this->object->getDggContainer()) {
                     $writer = new PHPExcel_Writer_Excel5_Escher($dggContainer);
                     $this->data = $writer->close();
@@ -89,7 +89,7 @@ class PHPExcel_Writer_Excel5_Escher
                     $this->spTypes = $writer->getSpTypes();
                 }
                 break;
-            case 'PHPExcel_Shared_Escher_DggContainer':
+            case \PHPExcel_Shared_Escher_DggContainer::class:
                 // this is a container record
 
                 // initialize
@@ -142,7 +142,7 @@ class PHPExcel_Writer_Excel5_Escher
 
                 $this->data = $header . $innerData;
                 break;
-            case 'PHPExcel_Shared_Escher_DggContainer_BstoreContainer':
+            case \PHPExcel_Shared_Escher_DggContainer_BstoreContainer::class:
                 // this is a container record
 
                 // initialize
@@ -169,7 +169,7 @@ class PHPExcel_Writer_Excel5_Escher
 
                 $this->data = $header . $innerData;
                 break;
-            case 'PHPExcel_Shared_Escher_DggContainer_BstoreContainer_BSE':
+            case \PHPExcel_Shared_Escher_DggContainer_BstoreContainer_BSE::class:
                 // this is a semi-container record
 
                 // initialize
@@ -218,7 +218,7 @@ class PHPExcel_Writer_Excel5_Escher
 
                 $this->data .= $data;
                 break;
-            case 'PHPExcel_Shared_Escher_DggContainer_BstoreContainer_BSE_Blip':
+            case \PHPExcel_Shared_Escher_DggContainer_BstoreContainer_BSE_Blip::class:
                 // this is an atom record
 
                 // write the record
@@ -278,7 +278,7 @@ class PHPExcel_Writer_Excel5_Escher
                         break;
                 }
                 break;
-            case 'PHPExcel_Shared_Escher_DgContainer':
+            case \PHPExcel_Shared_Escher_DgContainer::class:
                 // this is a container record
 
                 // initialize
@@ -296,7 +296,7 @@ class PHPExcel_Writer_Excel5_Escher
                 $header = pack('vvV', $recVerInstance, $recType, $length);
 
                 // number of shapes in this drawing (including group shape)
-                $countShapes = count($this->object->getSpgrContainer()->getChildren());
+                $countShapes = is_array($this->object->getSpgrContainer()->getChildren()) || $this->object->getSpgrContainer()->getChildren() instanceof \Countable ? count($this->object->getSpgrContainer()->getChildren()) : 0;
                 $innerData .= $header . pack('VV', $countShapes, $this->object->getLastSpId());
                 //$innerData .= $header . pack('VV', 0, 0);
 
@@ -331,7 +331,7 @@ class PHPExcel_Writer_Excel5_Escher
 
                 $this->data = $header . $innerData;
                 break;
-            case 'PHPExcel_Shared_Escher_DgContainer_SpgrContainer':
+            case \PHPExcel_Shared_Escher_DgContainer_SpgrContainer::class:
                 // this is a container record
 
                 // initialize
@@ -370,7 +370,7 @@ class PHPExcel_Writer_Excel5_Escher
                 $this->spOffsets = $spOffsets;
                 $this->spTypes = $spTypes;
                 break;
-            case 'PHPExcel_Shared_Escher_DgContainer_SpgrContainer_SpContainer':
+            case \PHPExcel_Shared_Escher_DgContainer_SpgrContainer_SpContainer::class:
                 // initialize
                 $data = '';
 
@@ -434,7 +434,7 @@ class PHPExcel_Writer_Excel5_Escher
                     $recType        = 0xF010;
 
                     // start coordinates
-                    list($column, $row) = PHPExcel_Cell::coordinateFromString($this->object->getStartCoordinates());
+                    [$column, $row] = PHPExcel_Cell::coordinateFromString($this->object->getStartCoordinates());
                     $c1 = PHPExcel_Cell::columnIndexFromString($column) - 1;
                     $r1 = $row - 1;
 
@@ -445,7 +445,7 @@ class PHPExcel_Writer_Excel5_Escher
                     $startOffsetY = $this->object->getStartOffsetY();
 
                     // end coordinates
-                    list($column, $row) = PHPExcel_Cell::coordinateFromString($this->object->getEndCoordinates());
+                    [$column, $row] = PHPExcel_Cell::coordinateFromString($this->object->getEndCoordinates());
                     $c2 = PHPExcel_Cell::columnIndexFromString($column) - 1;
                     $r2 = $row - 1;
 

@@ -51,13 +51,13 @@ class PHPExcel_Writer_OpenDocument extends PHPExcel_Writer_Abstract implements P
         $this->setPHPExcel($pPHPExcel);
 
         $writerPartsArray = array(
-            'content'    => 'PHPExcel_Writer_OpenDocument_Content',
-            'meta'       => 'PHPExcel_Writer_OpenDocument_Meta',
-            'meta_inf'   => 'PHPExcel_Writer_OpenDocument_MetaInf',
-            'mimetype'   => 'PHPExcel_Writer_OpenDocument_Mimetype',
-            'settings'   => 'PHPExcel_Writer_OpenDocument_Settings',
-            'styles'     => 'PHPExcel_Writer_OpenDocument_Styles',
-            'thumbnails' => 'PHPExcel_Writer_OpenDocument_Thumbnails'
+            'content'    => \PHPExcel_Writer_OpenDocument_Content::class,
+            'meta'       => \PHPExcel_Writer_OpenDocument_Meta::class,
+            'meta_inf'   => \PHPExcel_Writer_OpenDocument_MetaInf::class,
+            'mimetype'   => \PHPExcel_Writer_OpenDocument_Mimetype::class,
+            'settings'   => \PHPExcel_Writer_OpenDocument_Settings::class,
+            'styles'     => \PHPExcel_Writer_OpenDocument_Styles::class,
+            'thumbnails' => \PHPExcel_Writer_OpenDocument_Thumbnails::class
         );
 
         foreach ($writerPartsArray as $writer => $class) {

@@ -28,8 +28,8 @@
 class PHPExcel_Shared_Date
 {
     /** constants */
-    const CALENDAR_WINDOWS_1900 = 1900;        //    Base date of 1st Jan 1900 = 1.0
-    const CALENDAR_MAC_1904 = 1904;            //    Base date of 2nd Jan 1904 = 1.0
+    public const CALENDAR_WINDOWS_1900 = 1900;        //    Base date of 1st Jan 1900 = 1.0
+    public const CALENDAR_MAC_1904 = 1904;            //    Base date of 2nd Jan 1904 = 1.0
 
     /*
      * Names of the months of the year, indexed by shortname
@@ -184,7 +184,7 @@ class PHPExcel_Shared_Date
         date_default_timezone_set('UTC');
 
         $timezoneAdjustment = ($adjustToTimezone) ?
-            PHPExcel_Shared_TimeZone::getTimezoneAdjustment($timezone ? $timezone : $saveTimeZone, $dateValue) :
+            PHPExcel_Shared_TimeZone::getTimezoneAdjustment($timezone ?: $saveTimeZone, $dateValue) :
             0;
 
         $retValue = false;
